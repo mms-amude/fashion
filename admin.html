@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إدارة متجر أناقة</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --navy:#182A35;
+  --gold:#B38B4D;
+  --bg:#F5F3EF;
+  --white:#fff;
+  --text:#27343A;
+  --muted:#78848A;
+  --border:#E5E2DC;
+  --red:#B84040;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tajawal,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.topbar{background:var(--navy);color:white;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-size:23px;font-weight:800}
+.brand span{color:#E4C38B}
+.topbar small{color:#ddd}
+.container{max-width:1250px;margin:auto;padding:25px 18px}
+.card{background:white;border:1px solid var(--border);border-radius:13px;padding:22px;margin-bottom:22px;box-shadow:0 5px 20px #15252d08}
+h1,h2,h3{margin-top:0}
+h2{font-size:22px}
+.muted{color:var(--muted)}
+.login{max-width:430px;margin:70px auto}
+label{display:block;font-weight:700;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--border);border-radius:7px;background:white;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:85px}
+button.primary{background:var(--navy);color:white;border:0;border-radius:7px;padding:12px 20px;font-weight:700}
+button.primary:hover{background:#294656}
+button.gold{background:var(--gold);color:white;border:0;border-radius:7px;padding:12px 20px;font-weight:700}
+button.danger{background:#fff0f0;color:var(--red);border:1px solid #f1d0d0;border-radius:6px;padding:8px 12px}
+button.light{background:#f1efe9;color:var(--navy);border:1px solid var(--border);border-radius:6px;padding:8px 12px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.notice{padding:12px;border-radius:7px;margin:12px 0;white-space:pre-wrap}
+.notice.error{background:#fff0f0;color:#9d2828}
+.notice.success{background:#eaf8ee;color:#216a3b}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:22px}
+.stat{background:white;padding:20px;border-radius:12px;border:1px solid var(--border)}
+.stat strong{display:block;font-size:28px;color:var(--gold);margin-top:8px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
+.full{grid-column:1/-1}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{text-align:right;padding:12px;border-bottom:1px solid var(--border);vertical-align:middle}
+th{background:#F8F7F4}
+td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
+.status{display:inline-block;padding:4px 9px;border-radius:5px;background:#eaf8ee;color:#216a3b}
+.status.off{background:#f1efe9;color:#6e7477}
+.toolbar{display:flex;gap:12px;margin-bottom:18px}
+.toolbar input{flex:1}
+.toolbar select{max-width:200px}
+#editorTitle{margin-bottom:8px}
+.hint{font-size:13px;color:var(--muted);line-height:1.7}
+@media(max-width:650px){
+ .topbar{padding:15px;flex-wrap:wrap}
+ .container{padding:14px 10px}
+ .card{padding:15px}
+ .stats{gap:8px}
+ .stat{padding:12px}
+ .stat strong{font-size:22px}
+ .formgrid{grid-template-columns:1fr}
+ .full{grid-column:auto}
+ .toolbar{flex-direction:column}
+ .toolbar select{max-width:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">أناقة<span>.</span> <small> | لوحة الإدارة</small></div>
+  <button id="logoutBtn" class="light hidden" onclick="logout()">تسجيل الخروج</button>
+</header>
+
+<main class="container">
+
+<section id="loginPanel" class="card login">
+  <h1>مرحبًا بك</h1>
+  <p class="muted">سجّل الدخول لإدارة منتجات المتجر.</p>
+  <form id="loginForm">
+    <label for="email">البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="username" required>
+    <label for="password">كلمة المرور</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <div class="actions">
+      <button class="primary" type="submit">تسجيل الدخول</button>
+    </div>
+  </form>
+  <div id="loginMessage" aria-live="polite"></div>
+</section>
+
+<section id="dashboard" class="hidden">
+
+  <div class="stats">
+    <div class="stat">إجمالي المنتجات<strong id="totalCount">0</strong></div>
+    <div class="stat">المنتجات المنشورة<strong id="activeCount">0</strong></div>
+    <div class="stat">إجمالي المخزون<strong id="stockCount">0</strong></div>
+  </div>
+
+  <section class="card" id="productFormCard">
+    <h2 id="editorTitle">إضافة منتج جديد</h2>
+    <p class="hint">أدخل بيانات المنتج. استخدم رابط صورة مباشرًا يبدأ بـ https://</p>
+
+    <form id="productForm">
+      <input type="hidden" id="productId">
+
+      <div class="formgrid">
+        <div>
+          <label for="name">اسم المنتج *</label>
+          <input id="name" maxlength="150" required>
+        </div>
+
+        <div>
+          <label for="category">القسم *</label>
+          <select id="category" required>
+            <option value="نساء">أزياء نسائية</option>
+            <option value="رجال">أزياء رجالية</option>
+            <option value="أطفال">أطفال</option>
+            <option value="أحذية">أحذية</option>
+            <option value="إكسسوارات">إكسسوارات</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="price">السعر *</label>
+          <input id="price" type="number" min="0" step="0.01" required>
+        </div>
+
+        <div>
+          <label for="oldPrice">السعر قبل التخفيض</label>
+          <input id="oldPrice" type="number" min="0" step="0.01">
+        </div>
+
+        <div class="full">
+          <label for="imageUrl">رابط صورة المنتج *</label>
+          <input id="imageUrl" type="url" placeholder="https://example.com/image.jpg" required>
+        </div>
+
+        <div>
+          <label for="sizes">المقاسات</label>
+          <input id="sizes" placeholder="S, M, L, XL">
+        </div>
+
+        <div>
+          <label for="colors">الألوان</label>
+          <input id="colors" placeholder="أسود, أبيض, بيج">
+        </div>
+
+        <div>
+          <label for="stock">الكمية في المخزون *</label>
+          <input id="stock" type="number" min="0" step="1" value="0" required>
+        </div>
+
+        <div>
+          <label for="isActive">حالة المنتج</label>
+          <select id="isActive">
+            <option value="true">منشور في المتجر</option>
+            <option value="false">غير منشور</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="description">وصف المنتج</label>
+          <textarea id="description" maxlength="5000"></textarea>
+        </div>
+      </div>
+
+      <div id="formMessage" aria-live="polite"></div>
+
+      <div class="actions">
+        <button class="gold" id="saveBtn" type="submit">حفظ المنتج</button>
+        <button class="light" type="button" onclick="resetForm()">إلغاء / منتج جديد</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>إدارة المنتجات</h2>
+
+    <div class="toolbar">
+      <input id="search" placeholder="ابحث باسم المنتج..." oninput="renderProducts()">
+      <select id="filterCategory" onchange="renderProducts()">
+        <option value="">جميع الأقسام</option>
+        <option value="نساء">نساء</option>
+        <option value="رجال">رجال</option>
+        <option value="أطفال">أطفال</option>
+        <option value="أحذية">أحذية</option>
+        <option value="إكسسوارات">إكسسوارات</option>
+      </select>
+      <button class="light" onclick="loadProducts()">تحديث</button>
+    </div>
+
+    <div id="tableMessage" aria-live="polite"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>الصورة</th>
+            <th>المنتج</th>
+            <th>القسم</th>
+            <th>السعر</th>
+            <th>المخزون</th>
+            <th>الحالة</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="productRows"></tbody>
+      </table>
+    </div>
+  </section>
+</section>
+</main>
+
+<script>
+/* أدخل بيانات مشروعك هنا من Supabase > Connect / API Keys */
+const SUPABASE_URL = "ضع-رابط-المشروع-هنا";
+const SUPABASE_KEY = "ضع-المفتاح-العام-publishable-هنا";
+
+let db = null;
+let products = [];
+let busy = false;
+
+const $ = id => document.getElementById(id);
+
+function message(id, text, type = "error") {
+  $(id).innerHTML = "";
+  if (!text) return;
+  const box = document.createElement("div");
+  box.className = "notice " + type;
+  box.textContent = text;
+  $(id).appendChild(box);
+}
+
+function configured() {
+  return SUPABASE_URL.startsWith("https://") &&
+    !SUPABASE_URL.includes("ضع-") &&
+    SUPABASE_KEY.length > 20 &&
+    !SUPABASE_KEY.includes("ضع-");
+}
+
+function setBusy(value) {
+  busy = value;
+  $("saveBtn").disabled = value;
+}
+
+function money(value) {
+  return Number(value).toLocaleString("ar", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  });
+}
+
+async function init() {
+  if (!configured()) {
+    message("loginMessage",
+      "أدخل رابط مشروع Supabase والمفتاح العام في أعلى الكود أولًا.");
+    return;
+  }
+
+  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const { data: { session }, error } = await db.auth.getSession();
+  if (error) {
+    message("loginMessage", error.message);
+    return;
+  }
+
+  if (session) await showDashboard();
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!db) return;
+
+  message("loginMessage", "جارٍ تسجيل الدخول...", "success");
+
+  const { error } = await db.auth.signInWithPassword({
+    email: $("email").value.trim(),
+    password: $("password").value
+  });
+
+  if (error) {
+    message("loginMessage", "تعذر تسجيل الدخول: " + error.message);
+    return;
+  }
+
+  await showDashboard();
+});
+
+async function showDashboard() {
+  const { data: { user }, error } = await db.auth.getUser();
+
+  if (error || !user) {
+    message("loginMessage", "تعذر التحقق من الحساب.");
+    return;
+  }
+
+  // صلاحية المدير تتحقق أيضًا من قاعدة البيانات عبر RLS.
+  const { data, error: adminError } = await db
+    .from("store_admins")
+    .select("user_id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (adminError || !data) {
+    await db.auth.signOut();
+    $("dashboard").classList.add("hidden");
+    $("loginPanel").classList.remove("hidden");
+    $("logoutBtn").classList.add("hidden");
+    message("loginMessage",
+      "هذا الحساب غير مصرح له بإدارة المتجر. أضف UID الخاص به إلى جدول store_admins.");
+    return;
+  }
+
+  $("loginPanel").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("logoutBtn").classList.remove("hidden");
+  message("loginMessage", "");
+  await loadProducts();
+}
+
+async function logout() {
+  if (db) await db.auth.signOut();
+  products = [];
+  $("dashboard").classList.add("hidden");
+  $("loginPanel").classList.remove("hidden");
+  $("logoutBtn").classList.add("hidden");
+  resetForm();
+  message("loginMessage", "تم تسجيل الخروج.", "success");
+}
+
+async function loadProducts() {
+  message("tableMessage", "جارٍ تحميل المنتجات...", "success");
+
+  const { data, error } = await db
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    message("tableMessage", "تعذر تحميل المنتجات: " + error.message);
+    return;
+  }
+
+  products = data || [];
+  $("totalCount").textContent = products.length;
+  $("activeCount").textContent =
+    products.filter(p => p.is_active).length;
+  $("stockCount").textContent =
+    products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
+
+  message("tableMessage", "");
+  renderProducts();
+}
+
+function renderProducts() {
+  const term = $("search").value.trim().toLowerCase();
+  const category = $("filterCategory").value;
+  const tbody = $("productRows");
+  tbody.replaceChildren();
+
+  const list = products.filter(p =>
+    p.name.toLowerCase().includes(term) &&
+    (!category || p.category === category)
+  );
+
+  if (!list.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.textContent = "لا توجد منتجات مطابقة.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    return;
+  }
+
+  list.forEach(p => {
+    const tr = document.createElement("tr");
+
+    const imgCell = document.createElement("td");
+    const img = document.createElement("img");
+    img.src = p.image_url;
+    img.alt = p.name;
+    img.loading = "lazy";
+    img.onerror = () => { img.style.visibility = "hidden"; };
+    imgCell.appendChild(img);
+    tr.appendChild(imgCell);
+
+    addCell(tr, p.name);
+    addCell(tr, p.category);
+    addCell(tr, "$" + money(p.price));
+    addCell(tr, p.stock);
+
+    const statusCell = document.createElement("td");
+    const status = document.createElement("span");
+    status.className = "status" + (p.is_active ? "" : " off");
+    status.textContent = p.is_active ? "منشور" : "مخفي";
+    statusCell.appendChild(status);
+    tr.appendChild(statusCell);
+
+    const actions = document.createElement("td");
+    const edit = document.createElement("button");
+    edit.className = "light";
+    edit.textContent = "تعديل";
+    edit.onclick = () => editProduct(p.id);
+
+    const del = document.createElement("button");
+    del.className = "danger";
+    del.textContent = "حذف";
+    del.style.marginRight = "6px";
+    del.onclick = () => deleteProduct(p.id);
+
+    actions.append(edit, del);
+    tr.appendChild(actions);
+    tbody.appendChild(tr);
+  });
+}
+
+function addCell(tr, value) {
+  const td = document.createElement("td");
+  td.textContent = value ?? "";
+  tr.appendChild(td);
+}
+
+function resetForm() {
+  $("productForm").reset();
+  $("productId").value = "";
+  $("stock").value = "0";
+  $("isActive").value = "true";
+  $("editorTitle").textContent = "إضافة منتج جديد";
+  $("saveBtn").textContent = "حفظ المنتج";
+  message("formMessage", "");
+  setBusy(false);
+}
+
+function editProduct(id) {
+  const p = products.find(item => item.id === id);
+  if (!p) return;
+
+  $("productId").value = p.id;
+  $("name").value = p.name;
+  $("category").value = p.category;
+  $("price").value = p.price;
+  $("oldPrice").value = p.old_price ?? "";
+  $("imageUrl").value = p.image_url;
+  $("sizes").value = (p.sizes || []).join(", ");
+  $("colors").value = (p.colors || []).join(", ");
+  $("stock").value = p.stock;
+  $("isActive").value = String(p.is_active);
+  $("description").value = p.description || "";
+
+  $("editorTitle").textContent = "تعديل المنتج";
+  $("saveBtn").textContent = "حفظ التعديلات";
+  $("productFormCard").scrollIntoView({ behavior: "smooth" });
+}
+
+function parseList(value) {
+  return value.split(",").map(x => x.trim()).filter(Boolean);
+}
+
+$("productForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy) return;
+
+  const price = Number($("price").value);
+  const oldRaw = $("oldPrice").value.trim();
+  const oldPrice = oldRaw === "" ? null : Number(oldRaw);
+  const stock = Number($("stock").value);
+  const imageUrl = $("imageUrl").value.trim();
+
+  if (!Number.isFinite(price) || price < 0 ||
+      !Number.isInteger(stock) || stock < 0) {
+    message("formMessage", "تحقق من السعر والكمية.");
+    return;
+  }
+
+  if (oldPrice !== null &&
+      (!Number.isFinite(oldPrice) || oldPrice < price)) {
+    message("formMessage",
+      "يجب أن يكون السعر القديم مساويًا للسعر الحالي أو أكبر منه.");
+    return;
+  }
+
+  try {
+    const url = new URL(imageUrl);
+    if (url.protocol !== "https:") throw new Error();
+  } catch {
+    message("formMessage", "أدخل رابط صورة صحيحًا يبدأ بـ https://");
+    return;
+  }
+
+  const payload = {
+    name: $("name").value.trim(),
+    category: $("category").value,
+    price,
+    old_price: oldPrice,
+    image_url: imageUrl,
+    sizes: parseList($("sizes").value),
+    colors: parseList($("colors").value),
+    stock,
+    is_active: $("isActive").value === "true",
+    description: $("description").value.trim(),
+    updated_at: new Date().toISOString()
+  };
+
+  setBusy(true);
+  message("formMessage", "جارٍ الحفظ...", "success");
+
+  try {
+    const id = $("productId").value;
+    let result;
+
+    if (id) {
+      result = await db.from("products").update(payload).eq("id", id);
+    } else {
+      result = await db.from("products").insert(payload);
+    }
+
+    if (result.error) throw result.error;
+
+    message("formMessage",
+      id ? "تم تحديث المنتج بنجاح." : "تمت إضافة المنتج بنجاح.",
+      "success");
+
+    resetForm();
+    await loadProducts();
+  } catch (error) {
+    message("formMessage", "تعذر حفظ المنتج: " + error.message);
+  } finally {
+    setBusy(false);
+  }
+});
+
+async function deleteProduct(id) {
+  const p = products.find(item => item.id === id);
+  if (!p || !confirm("هل تريد حذف المنتج «" + p.name + "» نهائيًا؟")) return;
+
+  const { error } = await db.from("products").delete().eq("id", id);
+
+  if (error) {
+    message("tableMessage", "تعذر حذف المنتج: " + error.message);
+    return;
+  }
+
+  resetForm();
+  await loadProducts();
+  message("tableMessage", "تم حذف المنتج.", "success");
+}
+
+init();
+</script>
+</body>
+</html>
