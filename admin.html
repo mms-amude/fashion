@@ -25,6 +25,8 @@ body{margin:0;font-family:Tajawal,sans-serif;background:var(--bg);color:var(--te
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
+.reset-link{display:inline-block;margin-top:14px;color:var(--gold);font-weight:700;text-decoration:none;cursor:pointer}
+.reset-link:hover{text-decoration:underline}
 .topbar{background:var(--navy);color:white;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .brand{font-size:23px;font-weight:800}
 .brand span{color:#E4C38B}
@@ -101,7 +103,37 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
       <button class="primary" type="submit">تسجيل الدخول</button>
     </div>
   </form>
+  <a class="reset-link" onclick="showForgotPassword()">نسيت كلمة المرور؟</a>
   <div id="loginMessage" aria-live="polite"></div>
+</section>
+
+<section id="forgotPanel" class="card login hidden">
+  <h1>استعادة كلمة المرور</h1>
+  <p class="muted">أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإنشاء كلمة مرور جديدة.</p>
+  <form id="forgotForm">
+    <label for="resetEmail">البريد الإلكتروني</label>
+    <input id="resetEmail" type="email" autocomplete="email" required>
+    <div class="actions">
+      <button class="gold" type="submit">إرسال رابط الاستعادة</button>
+      <button class="light" type="button" onclick="showLogin()">العودة لتسجيل الدخول</button>
+    </div>
+  </form>
+  <div id="forgotMessage" aria-live="polite"></div>
+</section>
+
+<section id="resetPanel" class="card login hidden">
+  <h1>تعيين كلمة مرور جديدة</h1>
+  <p class="muted">أدخل كلمة المرور الجديدة لحساب الإدارة.</p>
+  <form id="resetForm">
+    <label for="newPassword">كلمة المرور الجديدة</label>
+    <input id="newPassword" type="password" minlength="6" autocomplete="new-password" required>
+    <label for="confirmPassword">تأكيد كلمة المرور</label>
+    <input id="confirmPassword" type="password" minlength="6" autocomplete="new-password" required>
+    <div class="actions">
+      <button class="gold" type="submit">حفظ كلمة المرور الجديدة</button>
+    </div>
+  </form>
+  <div id="resetMessage" aria-live="polite"></div>
 </section>
 
 <section id="dashboard" class="hidden">
@@ -229,11 +261,13 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 
 <script>
 /* أدخل بيانات مشروعك هنا من Supabase > Connect / API Keys */
-const SUPABASE_URL = "https://hvuezrpzzbordyfxmpqn.supabase.co";
-const SUPABASE_KEY = "sb_publishable_9j-owmrCmsbngZu3T-W7TA_bnFGIDnd";
+const SUPABASE_URL = "ضع-رابط-المشروع-هنا";
+const SUPABASE_KEY = "ضع-المفتاح-العام-publishable-هنا";
+
 let db = null;
 let products = [];
 let busy = false;
+let recoveryMode = false;
 
 const $ = id => document.getElementById(id);
 
@@ -274,6 +308,18 @@ async function init() {
 
   db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // مراقبة رابط استعادة كلمة المرور القادم من البريد الإلكتروني
+  db.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      recoveryMode = true;
+      $("loginPanel").classList.add("hidden");
+      $("forgotPanel").classList.add("hidden");
+      $("dashboard").classList.add("hidden");
+      $("logoutBtn").classList.add("hidden");
+      $("resetPanel").classList.remove("hidden");
+    }
+  });
+
   const { data: { session }, error } = await db.auth.getSession();
   if (error) {
     message("loginMessage", error.message);
@@ -282,6 +328,76 @@ async function init() {
 
   if (session) await showDashboard();
 }
+
+function showLogin() {
+  $("forgotPanel").classList.add("hidden");
+  $("resetPanel").classList.add("hidden");
+  $("dashboard").classList.add("hidden");
+  $("loginPanel").classList.remove("hidden");
+  $("logoutBtn").classList.add("hidden");
+  message("loginMessage", "");
+}
+
+function showForgotPassword() {
+  $("loginPanel").classList.add("hidden");
+  $("resetPanel").classList.add("hidden");
+  $("dashboard").classList.add("hidden");
+  $("forgotPanel").classList.remove("hidden");
+  $("logoutBtn").classList.add("hidden");
+  $("resetEmail").value = $("email").value.trim();
+  message("forgotMessage", "");
+}
+
+$("forgotForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!db) return;
+
+  const email = $("resetEmail").value.trim();
+  if (!email) return;
+
+  message("forgotMessage", "جارٍ إرسال رابط الاستعادة...", "success");
+
+  const redirectTo = window.location.origin + window.location.pathname;
+  const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo });
+
+  if (error) {
+    message("forgotMessage", "تعذر إرسال رابط الاستعادة: " + error.message);
+    return;
+  }
+
+  message("forgotMessage",
+    "تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني. افتح الرسالة واضغط على الرابط.",
+    "success");
+});
+
+$("resetForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const password = $("newPassword").value;
+  const confirm = $("confirmPassword").value;
+
+  if (password.length < 6) {
+    message("resetMessage", "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.");
+    return;
+  }
+
+  if (password !== confirm) {
+    message("resetMessage", "كلمتا المرور غير متطابقتين.");
+    return;
+  }
+
+  const { error } = await db.auth.updateUser({ password });
+
+  if (error) {
+    message("resetMessage", "تعذر تغيير كلمة المرور: " + error.message);
+    return;
+  }
+
+  message("resetMessage", "تم تغيير كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول بالكلمة الجديدة.", "success");
+  await db.auth.signOut();
+  recoveryMode = false;
+  setTimeout(showLogin, 1200);
+});
 
 $("loginForm").addEventListener("submit", async event => {
   event.preventDefault();
