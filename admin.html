@@ -68,6 +68,7 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 .toolbar select{max-width:200px}
 #editorTitle{margin-bottom:8px}
 .hint{font-size:13px;color:var(--muted);line-height:1.7}
+
 @media(max-width:650px){
  .topbar{padding:15px;flex-wrap:wrap}
  .container{padding:14px 10px}
@@ -82,6 +83,7 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 }
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -94,64 +96,119 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 <section id="loginPanel" class="card login">
   <h1>مرحبًا بك</h1>
   <p class="muted">سجّل الدخول لإدارة منتجات المتجر.</p>
+
   <form id="loginForm">
     <label for="email">البريد الإلكتروني</label>
     <input id="email" type="email" autocomplete="username" required>
+
     <label for="password">كلمة المرور</label>
     <input id="password" type="password" autocomplete="current-password" required>
+
     <div class="actions">
       <button class="primary" type="submit">تسجيل الدخول</button>
     </div>
   </form>
+
   <a class="reset-link" onclick="showForgotPassword()">نسيت كلمة المرور؟</a>
+
   <div id="loginMessage" aria-live="polite"></div>
 </section>
 
+
 <section id="forgotPanel" class="card login hidden">
   <h1>استعادة كلمة المرور</h1>
-  <p class="muted">أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإنشاء كلمة مرور جديدة.</p>
+  <p class="muted">
+    أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإنشاء كلمة مرور جديدة.
+  </p>
+
   <form id="forgotForm">
     <label for="resetEmail">البريد الإلكتروني</label>
     <input id="resetEmail" type="email" autocomplete="email" required>
+
     <div class="actions">
       <button class="gold" type="submit">إرسال رابط الاستعادة</button>
       <button class="light" type="button" onclick="showLogin()">العودة لتسجيل الدخول</button>
     </div>
   </form>
+
   <div id="forgotMessage" aria-live="polite"></div>
 </section>
 
+
 <section id="resetPanel" class="card login hidden">
   <h1>تعيين كلمة مرور جديدة</h1>
-  <p class="muted">أدخل كلمة المرور الجديدة لحساب الإدارة.</p>
+  <p class="muted">
+    أدخل كلمة المرور الجديدة لحساب الإدارة.
+  </p>
+
   <form id="resetForm">
+
     <label for="newPassword">كلمة المرور الجديدة</label>
-    <input id="newPassword" type="password" minlength="6" autocomplete="new-password" required>
+    <input
+      id="newPassword"
+      type="password"
+      minlength="6"
+      autocomplete="new-password"
+      required
+    >
+
     <label for="confirmPassword">تأكيد كلمة المرور</label>
-    <input id="confirmPassword" type="password" minlength="6" autocomplete="new-password" required>
+    <input
+      id="confirmPassword"
+      type="password"
+      minlength="6"
+      autocomplete="new-password"
+      required
+    >
+
     <div class="actions">
-      <button class="gold" type="submit">حفظ كلمة المرور الجديدة</button>
+      <button class="gold" type="submit">
+        حفظ كلمة المرور الجديدة
+      </button>
     </div>
+
   </form>
+
   <div id="resetMessage" aria-live="polite"></div>
 </section>
+
 
 <section id="dashboard" class="hidden">
 
   <div class="stats">
-    <div class="stat">إجمالي المنتجات<strong id="totalCount">0</strong></div>
-    <div class="stat">المنتجات المنشورة<strong id="activeCount">0</strong></div>
-    <div class="stat">إجمالي المخزون<strong id="stockCount">0</strong></div>
+
+    <div class="stat">
+      إجمالي المنتجات
+      <strong id="totalCount">0</strong>
+    </div>
+
+    <div class="stat">
+      المنتجات المنشورة
+      <strong id="activeCount">0</strong>
+    </div>
+
+    <div class="stat">
+      إجمالي المخزون
+      <strong id="stockCount">0</strong>
+    </div>
+
   </div>
 
+
   <section class="card" id="productFormCard">
+
     <h2 id="editorTitle">إضافة منتج جديد</h2>
-    <p class="hint">أدخل بيانات المنتج. استخدم رابط صورة مباشرًا يبدأ بـ https://</p>
+
+    <p class="hint">
+      أدخل بيانات المنتج. استخدم رابط صورة مباشرًا يبدأ بـ https://
+    </p>
 
     <form id="productForm">
+
       <input type="hidden" id="productId">
 
       <div class="formgrid">
+
         <div>
           <label for="name">اسم المنتج *</label>
           <input id="name" maxlength="150" required>
@@ -159,6 +216,7 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 
         <div>
           <label for="category">القسم *</label>
+
           <select id="category" required>
             <option value="نساء">أزياء نسائية</option>
             <option value="رجال">أزياء رجالية</option>
@@ -180,7 +238,12 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 
         <div class="full">
           <label for="imageUrl">رابط صورة المنتج *</label>
-          <input id="imageUrl" type="url" placeholder="https://example.com/image.jpg" required>
+          <input
+            id="imageUrl"
+            type="url"
+            placeholder="https://example.com/image.jpg"
+            required
+          >
         </div>
 
         <div>
@@ -195,11 +258,19 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
 
         <div>
           <label for="stock">الكمية في المخزون *</label>
-          <input id="stock" type="number" min="0" step="1" value="0" required>
+          <input
+            id="stock"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+            required
+          >
         </div>
 
         <div>
           <label for="isActive">حالة المنتج</label>
+
           <select id="isActive">
             <option value="true">منشور في المتجر</option>
             <option value="false">غير منشور</option>
@@ -210,22 +281,38 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
           <label for="description">وصف المنتج</label>
           <textarea id="description" maxlength="5000"></textarea>
         </div>
+
       </div>
 
       <div id="formMessage" aria-live="polite"></div>
 
       <div class="actions">
-        <button class="gold" id="saveBtn" type="submit">حفظ المنتج</button>
-        <button class="light" type="button" onclick="resetForm()">إلغاء / منتج جديد</button>
+        <button class="gold" id="saveBtn" type="submit">
+          حفظ المنتج
+        </button>
+
+        <button class="light" type="button" onclick="resetForm()">
+          إلغاء / منتج جديد
+        </button>
       </div>
+
     </form>
+
   </section>
 
+
   <section class="card">
+
     <h2>إدارة المنتجات</h2>
 
     <div class="toolbar">
-      <input id="search" placeholder="ابحث باسم المنتج..." oninput="renderProducts()">
+
+      <input
+        id="search"
+        placeholder="ابحث باسم المنتج..."
+        oninput="renderProducts()"
+      >
+
       <select id="filterCategory" onchange="renderProducts()">
         <option value="">جميع الأقسام</option>
         <option value="نساء">نساء</option>
@@ -234,13 +321,19 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
         <option value="أحذية">أحذية</option>
         <option value="إكسسوارات">إكسسوارات</option>
       </select>
-      <button class="light" onclick="loadProducts()">تحديث</button>
+
+      <button class="light" onclick="loadProducts()">
+        تحديث
+      </button>
+
     </div>
 
     <div id="tableMessage" aria-live="polite"></div>
 
     <div class="table-wrap">
+
       <table>
+
         <thead>
           <tr>
             <th>الصورة</th>
@@ -252,433 +345,1335 @@ td img{width:55px;height:65px;object-fit:cover;border-radius:6px}
             <th>الإجراءات</th>
           </tr>
         </thead>
+
         <tbody id="productRows"></tbody>
+
       </table>
+
     </div>
+
   </section>
+
 </section>
+
 </main>
 
+
 <script>
-/* أدخل بيانات مشروعك هنا من Supabase > Connect / API Keys */
-const SUPABASE_URL = "https://hvuezrpzzbordyfxmpqn.supabase.co";
-const SUPABASE_KEY = "sb_publishable_9j-owmrCmsbngZu3T-W7TA_bnFGIDnd";
+
+/* =========================================================
+   إعداد Supabase
+   ========================================================= */
+
+const SUPABASE_URL =
+  "https://hvuezrpzzbordyfxmpqn.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_9j-owmrCmsbngZu3T-W7TA_bnFGIDnd";
+
+
+/* =========================================================
+   رابط لوحة الإدارة الرسمي
+   ========================================================= */
+
+const ADMIN_REDIRECT_URL =
+  "https://mms-amude.github.io/fashion/admin.html";
+
+
+/* =========================================================
+   المتغيرات العامة
+   ========================================================= */
 
 let db = null;
 let products = [];
 let busy = false;
 let recoveryMode = false;
 
+
+/* =========================================================
+   اختصار getElementById
+   ========================================================= */
+
 const $ = id => document.getElementById(id);
 
+
+/* =========================================================
+   الرسائل
+   ========================================================= */
+
 function message(id, text, type = "error") {
+
   $(id).innerHTML = "";
+
   if (!text) return;
+
   const box = document.createElement("div");
+
   box.className = "notice " + type;
+
   box.textContent = text;
+
   $(id).appendChild(box);
 }
 
+
+/* =========================================================
+   التحقق من إعداد Supabase
+   ========================================================= */
+
 function configured() {
+
   return SUPABASE_URL.startsWith("https://") &&
     !SUPABASE_URL.includes("ضع-") &&
     SUPABASE_KEY.length > 20 &&
     !SUPABASE_KEY.includes("ضع-");
+
 }
+
+
+/* =========================================================
+   حالة التحميل
+   ========================================================= */
 
 function setBusy(value) {
+
   busy = value;
+
   $("saveBtn").disabled = value;
+
 }
 
+
+/* =========================================================
+   تنسيق السعر
+   ========================================================= */
+
 function money(value) {
+
   return Number(value).toLocaleString("ar", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2
   });
+
 }
 
-async function init() {
-  if (!configured()) {
-    message("loginMessage",
-      "أدخل رابط مشروع Supabase والمفتاح العام في أعلى الكود أولًا.");
-    return;
-  }
 
-  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+/* =========================================================
+   التحقق من أن الرابط هو رابط استعادة كلمة المرور
+   ========================================================= */
 
-  // مراقبة رابط استعادة كلمة المرور القادم من البريد الإلكتروني
-  db.auth.onAuthStateChange((event) => {
-    if (event === "PASSWORD_RECOVERY") {
-      recoveryMode = true;
-      $("loginPanel").classList.add("hidden");
-      $("forgotPanel").classList.add("hidden");
-      $("dashboard").classList.add("hidden");
-      $("logoutBtn").classList.add("hidden");
-      $("resetPanel").classList.remove("hidden");
-    }
-  });
+function isRecoveryUrl() {
 
-  const { data: { session }, error } = await db.auth.getSession();
-  if (error) {
-    message("loginMessage", error.message);
-    return;
-  }
+  const hash = window.location.hash || "";
 
-  if (session) await showDashboard();
-}
+  const search = window.location.search || "";
 
-function showLogin() {
-  $("forgotPanel").classList.add("hidden");
-  $("resetPanel").classList.add("hidden");
-  $("dashboard").classList.add("hidden");
-  $("loginPanel").classList.remove("hidden");
-  $("logoutBtn").classList.add("hidden");
-  message("loginMessage", "");
-}
+  const hashParams =
+    new URLSearchParams(hash.replace(/^#/, ""));
 
-function showForgotPassword() {
-  $("loginPanel").classList.add("hidden");
-  $("resetPanel").classList.add("hidden");
-  $("dashboard").classList.add("hidden");
-  $("forgotPanel").classList.remove("hidden");
-  $("logoutBtn").classList.add("hidden");
-  $("resetEmail").value = $("email").value.trim();
-  message("forgotMessage", "");
-}
+  const searchParams =
+    new URLSearchParams(search);
 
-$("forgotForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!db) return;
-
-  const email = $("resetEmail").value.trim();
-  if (!email) return;
-
-  message("forgotMessage", "جارٍ إرسال رابط الاستعادة...", "success");
-
-  const redirectTo = "https://mms-amude.github.io/fashion/admin.html";
-  const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo });
-
-  if (error) {
-    message("forgotMessage", "تعذر إرسال رابط الاستعادة: " + error.message);
-    return;
-  }
-
-  message("forgotMessage",
-    "تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني. افتح الرسالة واضغط على الرابط.",
-    "success");
-});
-
-$("resetForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const password = $("newPassword").value;
-  const confirm = $("confirmPassword").value;
-
-  if (password.length < 6) {
-    message("resetMessage", "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.");
-    return;
-  }
-
-  if (password !== confirm) {
-    message("resetMessage", "كلمتا المرور غير متطابقتين.");
-    return;
-  }
-
-  const { error } = await db.auth.updateUser({ password });
-
-  if (error) {
-    message("resetMessage", "تعذر تغيير كلمة المرور: " + error.message);
-    return;
-  }
-
-  message("resetMessage", "تم تغيير كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول بالكلمة الجديدة.", "success");
-  await db.auth.signOut();
-  recoveryMode = false;
-  setTimeout(showLogin, 1200);
-});
-
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!db) return;
-
-  message("loginMessage", "جارٍ تسجيل الدخول...", "success");
-
-  const { error } = await db.auth.signInWithPassword({
-    email: $("email").value.trim(),
-    password: $("password").value
-  });
-
-  if (error) {
-    message("loginMessage", "تعذر تسجيل الدخول: " + error.message);
-    return;
-  }
-
-  await showDashboard();
-});
-
-async function showDashboard() {
-  const { data: { user }, error } = await db.auth.getUser();
-
-  if (error || !user) {
-    message("loginMessage", "تعذر التحقق من الحساب.");
-    return;
-  }
-
-  // صلاحية المدير تتحقق أيضًا من قاعدة البيانات عبر RLS.
-  const { data, error: adminError } = await db
-    .from("store_admins")
-    .select("user_id")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  if (adminError || !data) {
-    await db.auth.signOut();
-    $("dashboard").classList.add("hidden");
-    $("loginPanel").classList.remove("hidden");
-    $("logoutBtn").classList.add("hidden");
-    message("loginMessage",
-      "هذا الحساب غير مصرح له بإدارة المتجر. أضف UID الخاص به إلى جدول store_admins.");
-    return;
-  }
-
-  $("loginPanel").classList.add("hidden");
-  $("dashboard").classList.remove("hidden");
-  $("logoutBtn").classList.remove("hidden");
-  message("loginMessage", "");
-  await loadProducts();
-}
-
-async function logout() {
-  if (db) await db.auth.signOut();
-  products = [];
-  $("dashboard").classList.add("hidden");
-  $("loginPanel").classList.remove("hidden");
-  $("logoutBtn").classList.add("hidden");
-  resetForm();
-  message("loginMessage", "تم تسجيل الخروج.", "success");
-}
-
-async function loadProducts() {
-  message("tableMessage", "جارٍ تحميل المنتجات...", "success");
-
-  const { data, error } = await db
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    message("tableMessage", "تعذر تحميل المنتجات: " + error.message);
-    return;
-  }
-
-  products = data || [];
-  $("totalCount").textContent = products.length;
-  $("activeCount").textContent =
-    products.filter(p => p.is_active).length;
-  $("stockCount").textContent =
-    products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
-
-  message("tableMessage", "");
-  renderProducts();
-}
-
-function renderProducts() {
-  const term = $("search").value.trim().toLowerCase();
-  const category = $("filterCategory").value;
-  const tbody = $("productRows");
-  tbody.replaceChildren();
-
-  const list = products.filter(p =>
-    p.name.toLowerCase().includes(term) &&
-    (!category || p.category === category)
+  return (
+    hashParams.get("type") === "recovery" ||
+    searchParams.get("type") === "recovery"
   );
 
-  if (!list.length) {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.colSpan = 7;
-    td.textContent = "لا توجد منتجات مطابقة.";
-    tr.appendChild(td);
-    tbody.appendChild(tr);
+}
+
+
+/* =========================================================
+   إظهار شاشة تعيين كلمة المرور
+   ========================================================= */
+
+function showResetPanel() {
+
+  recoveryMode = true;
+
+  $("loginPanel").classList.add("hidden");
+
+  $("forgotPanel").classList.add("hidden");
+
+  $("dashboard").classList.add("hidden");
+
+  $("logoutBtn").classList.add("hidden");
+
+  $("resetPanel").classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   تهيئة التطبيق
+   ========================================================= */
+
+async function init() {
+
+  if (!configured()) {
+
+    message(
+      "loginMessage",
+      "أدخل رابط مشروع Supabase والمفتاح العام في أعلى الكود أولًا."
+    );
+
     return;
   }
 
-  list.forEach(p => {
-    const tr = document.createElement("tr");
 
-    const imgCell = document.createElement("td");
-    const img = document.createElement("img");
-    img.src = p.image_url;
-    img.alt = p.name;
-    img.loading = "lazy";
-    img.onerror = () => { img.style.visibility = "hidden"; };
-    imgCell.appendChild(img);
-    tr.appendChild(imgCell);
+  db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-    addCell(tr, p.name);
-    addCell(tr, p.category);
-    addCell(tr, "$" + money(p.price));
-    addCell(tr, p.stock);
 
-    const statusCell = document.createElement("td");
-    const status = document.createElement("span");
-    status.className = "status" + (p.is_active ? "" : " off");
-    status.textContent = p.is_active ? "منشور" : "مخفي";
-    statusCell.appendChild(status);
-    tr.appendChild(statusCell);
+  /*
+   * مهم جدًا:
+   * نتحقق أولًا هل الصفحة جاءت من رابط
+   * استعادة كلمة المرور.
+   */
 
-    const actions = document.createElement("td");
-    const edit = document.createElement("button");
-    edit.className = "light";
-    edit.textContent = "تعديل";
-    edit.onclick = () => editProduct(p.id);
+  const recoveryLink = isRecoveryUrl();
 
-    const del = document.createElement("button");
-    del.className = "danger";
-    del.textContent = "حذف";
-    del.style.marginRight = "6px";
-    del.onclick = () => deleteProduct(p.id);
 
-    actions.append(edit, del);
-    tr.appendChild(actions);
-    tbody.appendChild(tr);
-  });
-}
+  /* =======================================================
+     مراقبة أحداث Supabase Auth
+     ======================================================= */
 
-function addCell(tr, value) {
-  const td = document.createElement("td");
-  td.textContent = value ?? "";
-  tr.appendChild(td);
-}
+  db.auth.onAuthStateChange((event) => {
 
-function resetForm() {
-  $("productForm").reset();
-  $("productId").value = "";
-  $("stock").value = "0";
-  $("isActive").value = "true";
-  $("editorTitle").textContent = "إضافة منتج جديد";
-  $("saveBtn").textContent = "حفظ المنتج";
-  message("formMessage", "");
-  setBusy(false);
-}
+    if (event === "PASSWORD_RECOVERY") {
 
-function editProduct(id) {
-  const p = products.find(item => item.id === id);
-  if (!p) return;
+      showResetPanel();
 
-  $("productId").value = p.id;
-  $("name").value = p.name;
-  $("category").value = p.category;
-  $("price").value = p.price;
-  $("oldPrice").value = p.old_price ?? "";
-  $("imageUrl").value = p.image_url;
-  $("sizes").value = (p.sizes || []).join(", ");
-  $("colors").value = (p.colors || []).join(", ");
-  $("stock").value = p.stock;
-  $("isActive").value = String(p.is_active);
-  $("description").value = p.description || "";
+      message(
+        "resetMessage",
+        "أدخل كلمة المرور الجديدة لحساب الإدارة.",
+        "success"
+      );
 
-  $("editorTitle").textContent = "تعديل المنتج";
-  $("saveBtn").textContent = "حفظ التعديلات";
-  $("productFormCard").scrollIntoView({ behavior: "smooth" });
-}
-
-function parseList(value) {
-  return value.split(",").map(x => x.trim()).filter(Boolean);
-}
-
-$("productForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (busy) return;
-
-  const price = Number($("price").value);
-  const oldRaw = $("oldPrice").value.trim();
-  const oldPrice = oldRaw === "" ? null : Number(oldRaw);
-  const stock = Number($("stock").value);
-  const imageUrl = $("imageUrl").value.trim();
-
-  if (!Number.isFinite(price) || price < 0 ||
-      !Number.isInteger(stock) || stock < 0) {
-    message("formMessage", "تحقق من السعر والكمية.");
-    return;
-  }
-
-  if (oldPrice !== null &&
-      (!Number.isFinite(oldPrice) || oldPrice < price)) {
-    message("formMessage",
-      "يجب أن يكون السعر القديم مساويًا للسعر الحالي أو أكبر منه.");
-    return;
-  }
-
-  try {
-    const url = new URL(imageUrl);
-    if (url.protocol !== "https:") throw new Error();
-  } catch {
-    message("formMessage", "أدخل رابط صورة صحيحًا يبدأ بـ https://");
-    return;
-  }
-
-  const payload = {
-    name: $("name").value.trim(),
-    category: $("category").value,
-    price,
-    old_price: oldPrice,
-    image_url: imageUrl,
-    sizes: parseList($("sizes").value),
-    colors: parseList($("colors").value),
-    stock,
-    is_active: $("isActive").value === "true",
-    description: $("description").value.trim(),
-    updated_at: new Date().toISOString()
-  };
-
-  setBusy(true);
-  message("formMessage", "جارٍ الحفظ...", "success");
-
-  try {
-    const id = $("productId").value;
-    let result;
-
-    if (id) {
-      result = await db.from("products").update(payload).eq("id", id);
-    } else {
-      result = await db.from("products").insert(payload);
     }
 
-    if (result.error) throw result.error;
+  });
 
-    message("formMessage",
-      id ? "تم تحديث المنتج بنجاح." : "تمت إضافة المنتج بنجاح.",
-      "success");
 
-    resetForm();
-    await loadProducts();
-  } catch (error) {
-    message("formMessage", "تعذر حفظ المنتج: " + error.message);
-  } finally {
-    setBusy(false);
-  }
-});
+  /* =======================================================
+     الحصول على الجلسة الحالية
+     ======================================================= */
 
-async function deleteProduct(id) {
-  const p = products.find(item => item.id === id);
-  if (!p || !confirm("هل تريد حذف المنتج «" + p.name + "» نهائيًا؟")) return;
+  const {
+    data: { session },
+    error
+  } = await db.auth.getSession();
 
-  const { error } = await db.from("products").delete().eq("id", id);
 
   if (error) {
-    message("tableMessage", "تعذر حذف المنتج: " + error.message);
+
+    message(
+      "loginMessage",
+      "تعذر قراءة جلسة الدخول: " + error.message
+    );
+
     return;
   }
 
-  resetForm();
-  await loadProducts();
-  message("tableMessage", "تم حذف المنتج.", "success");
+
+  /*
+   * إذا كان الرابط رابط استعادة كلمة المرور،
+   * لا نذهب إلى لوحة الإدارة حتى لو كانت هناك جلسة.
+   */
+
+  if (recoveryLink) {
+
+    showResetPanel();
+
+    /*
+     * إذا لم توجد جلسة استعادة، فهذا يعني غالبًا
+     * أن الرابط منتهي أو تم استخدامه سابقًا.
+     */
+
+    if (!session) {
+
+      message(
+        "resetMessage",
+        "رابط استعادة كلمة المرور غير صالح أو انتهت صلاحيته. اطلب رابطًا جديدًا من صفحة تسجيل الدخول."
+      );
+
+    }
+
+    return;
+  }
+
+
+  /* =======================================================
+     الدخول الطبيعي
+     ======================================================= */
+
+  if (session) {
+
+    await showDashboard();
+
+  } else {
+
+    showLogin();
+
+  }
+
 }
 
+
+/* =========================================================
+   إظهار شاشة تسجيل الدخول
+   ========================================================= */
+
+function showLogin() {
+
+  recoveryMode = false;
+
+  $("forgotPanel").classList.add("hidden");
+
+  $("resetPanel").classList.add("hidden");
+
+  $("dashboard").classList.add("hidden");
+
+  $("loginPanel").classList.remove("hidden");
+
+  $("logoutBtn").classList.add("hidden");
+
+  message("loginMessage", "");
+
+}
+
+
+/* =========================================================
+   إظهار شاشة نسيت كلمة المرور
+   ========================================================= */
+
+function showForgotPassword() {
+
+  recoveryMode = false;
+
+  $("loginPanel").classList.add("hidden");
+
+  $("resetPanel").classList.add("hidden");
+
+  $("dashboard").classList.add("hidden");
+
+  $("forgotPanel").classList.remove("hidden");
+
+  $("logoutBtn").classList.add("hidden");
+
+  $("resetEmail").value =
+    $("email").value.trim();
+
+  message("forgotMessage", "");
+
+}
+
+
+/* =========================================================
+   إرسال رابط استعادة كلمة المرور
+   ========================================================= */
+
+$("forgotForm").addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    if (!db) return;
+
+
+    const email =
+      $("resetEmail").value.trim();
+
+
+    if (!email) return;
+
+
+    message(
+      "forgotMessage",
+      "جارٍ إرسال رابط الاستعادة...",
+      "success"
+    );
+
+
+    const {
+      error
+    } = await db.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo: ADMIN_REDIRECT_URL
+      }
+    );
+
+
+    if (error) {
+
+      message(
+        "forgotMessage",
+        "تعذر إرسال رابط الاستعادة: " +
+        error.message
+      );
+
+      return;
+    }
+
+
+    message(
+      "forgotMessage",
+      "تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني. افتح الرسالة واضغط على الرابط.",
+      "success"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   تغيير كلمة المرور
+   ========================================================= */
+
+$("resetForm").addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    if (!db) return;
+
+
+    const password =
+      $("newPassword").value;
+
+    const confirm =
+      $("confirmPassword").value;
+
+
+    /* التحقق من طول كلمة المرور */
+
+    if (password.length < 6) {
+
+      message(
+        "resetMessage",
+        "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل."
+      );
+
+      return;
+    }
+
+
+    /* التحقق من التطابق */
+
+    if (password !== confirm) {
+
+      message(
+        "resetMessage",
+        "كلمتا المرور غير متطابقتين."
+      );
+
+      return;
+    }
+
+
+    /*
+     * التأكد من وجود جلسة استعادة
+     * قبل محاولة تغيير كلمة المرور.
+     */
+
+    const {
+      data: { session },
+      error: sessionError
+    } = await db.auth.getSession();
+
+
+    if (sessionError || !session) {
+
+      message(
+        "resetMessage",
+        "انتهت جلسة استعادة كلمة المرور أو أن الرابط غير صالح. اطلب رابط استعادة جديدًا."
+      );
+
+      return;
+    }
+
+
+    message(
+      "resetMessage",
+      "جارٍ حفظ كلمة المرور الجديدة...",
+      "success"
+    );
+
+
+    /* تحديث كلمة المرور */
+
+    const {
+      error
+    } = await db.auth.updateUser({
+      password: password
+    });
+
+
+    if (error) {
+
+      message(
+        "resetMessage",
+        "تعذر تغيير كلمة المرور: " +
+        error.message
+      );
+
+      return;
+    }
+
+
+    message(
+      "resetMessage",
+      "تم تغيير كلمة المرور بنجاح. سيتم نقلك إلى صفحة تسجيل الدخول...",
+      "success"
+    );
+
+
+    /*
+     * تسجيل الخروج من جلسة الاستعادة.
+     */
+
+    await db.auth.signOut();
+
+
+    recoveryMode = false;
+
+
+    /*
+     * إزالة access_token و refresh_token و type=recovery
+     * من عنوان الصفحة.
+     */
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+
+    $("newPassword").value = "";
+
+    $("confirmPassword").value = "";
+
+
+    setTimeout(() => {
+
+      showLogin();
+
+      message(
+        "loginMessage",
+        "تم تغيير كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول بالكلمة الجديدة.",
+        "success"
+      );
+
+    }, 1200);
+
+  }
+);
+
+
+/* =========================================================
+   تسجيل الدخول
+   ========================================================= */
+
+$("loginForm").addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    if (!db) return;
+
+
+    message(
+      "loginMessage",
+      "جارٍ تسجيل الدخول...",
+      "success"
+    );
+
+
+    const {
+      error
+    } = await db.auth.signInWithPassword({
+
+      email:
+        $("email").value.trim(),
+
+      password:
+        $("password").value
+
+    });
+
+
+    if (error) {
+
+      message(
+        "loginMessage",
+        "تعذر تسجيل الدخول: " +
+        error.message
+      );
+
+      return;
+    }
+
+
+    await showDashboard();
+
+  }
+);
+
+
+/* =========================================================
+   إظهار لوحة الإدارة
+   ========================================================= */
+
+async function showDashboard() {
+
+  const {
+    data: { user },
+    error
+  } = await db.auth.getUser();
+
+
+  if (error || !user) {
+
+    message(
+      "loginMessage",
+      "تعذر التحقق من الحساب."
+    );
+
+    return;
+  }
+
+
+  /*
+   * صلاحية المدير تتحقق أيضًا من قاعدة البيانات عبر RLS.
+   */
+
+  const {
+    data,
+    error: adminError
+  } = await db
+
+    .from("store_admins")
+
+    .select("user_id")
+
+    .eq("user_id", user.id)
+
+    .maybeSingle();
+
+
+  if (adminError || !data) {
+
+    await db.auth.signOut();
+
+    $("dashboard").classList.add("hidden");
+
+    $("loginPanel").classList.remove("hidden");
+
+    $("logoutBtn").classList.add("hidden");
+
+    message(
+      "loginMessage",
+      "هذا الحساب غير مصرح له بإدارة المتجر. أضف UID الخاص به إلى جدول store_admins."
+    );
+
+    return;
+  }
+
+
+  $("loginPanel").classList.add("hidden");
+
+  $("forgotPanel").classList.add("hidden");
+
+  $("resetPanel").classList.add("hidden");
+
+  $("dashboard").classList.remove("hidden");
+
+  $("logoutBtn").classList.remove("hidden");
+
+  message("loginMessage", "");
+
+  await loadProducts();
+
+}
+
+
+/* =========================================================
+   تسجيل الخروج
+   ========================================================= */
+
+async function logout() {
+
+  if (db) {
+
+    await db.auth.signOut();
+
+  }
+
+
+  products = [];
+
+
+  $("dashboard").classList.add("hidden");
+
+  $("loginPanel").classList.remove("hidden");
+
+  $("logoutBtn").classList.add("hidden");
+
+
+  resetForm();
+
+
+  message(
+    "loginMessage",
+    "تم تسجيل الخروج.",
+    "success"
+  );
+
+}
+
+
+/* =========================================================
+   تحميل المنتجات
+   ========================================================= */
+
+async function loadProducts() {
+
+  message(
+    "tableMessage",
+    "جارٍ تحميل المنتجات...",
+    "success"
+  );
+
+
+  const {
+    data,
+    error
+  } = await db
+
+    .from("products")
+
+    .select("*")
+
+    .order(
+      "created_at",
+      {
+        ascending: false
+      }
+    );
+
+
+  if (error) {
+
+    message(
+      "tableMessage",
+      "تعذر تحميل المنتجات: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  products = data || [];
+
+
+  $("totalCount").textContent =
+    products.length;
+
+
+  $("activeCount").textContent =
+    products.filter(
+      p => p.is_active
+    ).length;
+
+
+  $("stockCount").textContent =
+    products.reduce(
+      (sum, p) =>
+        sum + Number(p.stock || 0),
+      0
+    );
+
+
+  message(
+    "tableMessage",
+    ""
+  );
+
+
+  renderProducts();
+
+}
+
+
+/* =========================================================
+   عرض المنتجات
+   ========================================================= */
+
+function renderProducts() {
+
+  const term =
+    $("search").value.trim().toLowerCase();
+
+  const category =
+    $("filterCategory").value;
+
+  const tbody =
+    $("productRows");
+
+
+  tbody.replaceChildren();
+
+
+  const list =
+    products.filter(
+      p =>
+        p.name.toLowerCase().includes(term) &&
+        (!category || p.category === category)
+    );
+
+
+  if (!list.length) {
+
+    const tr =
+      document.createElement("tr");
+
+    const td =
+      document.createElement("td");
+
+    td.colSpan = 7;
+
+    td.textContent =
+      "لا توجد منتجات مطابقة.";
+
+    tr.appendChild(td);
+
+    tbody.appendChild(tr);
+
+    return;
+  }
+
+
+  list.forEach(p => {
+
+    const tr =
+      document.createElement("tr");
+
+
+    /* الصورة */
+
+    const imgCell =
+      document.createElement("td");
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      p.image_url;
+
+    img.alt =
+      p.name;
+
+    img.loading =
+      "lazy";
+
+    img.onerror =
+      () => {
+        img.style.visibility =
+          "hidden";
+      };
+
+
+    imgCell.appendChild(img);
+
+    tr.appendChild(imgCell);
+
+
+    addCell(
+      tr,
+      p.name
+    );
+
+    addCell(
+      tr,
+      p.category
+    );
+
+    addCell(
+      tr,
+      "$" + money(p.price)
+    );
+
+    addCell(
+      tr,
+      p.stock
+    );
+
+
+    /* الحالة */
+
+    const statusCell =
+      document.createElement("td");
+
+    const status =
+      document.createElement("span");
+
+    status.className =
+      "status" +
+      (p.is_active ? "" : " off");
+
+    status.textContent =
+      p.is_active
+        ? "منشور"
+        : "مخفي";
+
+    statusCell.appendChild(status);
+
+    tr.appendChild(statusCell);
+
+
+    /* الإجراءات */
+
+    const actions =
+      document.createElement("td");
+
+
+    const edit =
+      document.createElement("button");
+
+    edit.className =
+      "light";
+
+    edit.textContent =
+      "تعديل";
+
+    edit.onclick =
+      () => editProduct(p.id);
+
+
+    const del =
+      document.createElement("button");
+
+    del.className =
+      "danger";
+
+    del.textContent =
+      "حذف";
+
+    del.style.marginRight =
+      "6px";
+
+    del.onclick =
+      () => deleteProduct(p.id);
+
+
+    actions.append(
+      edit,
+      del
+    );
+
+    tr.appendChild(actions);
+
+    tbody.appendChild(tr);
+
+  });
+
+}
+
+
+/* =========================================================
+   إضافة خلية إلى الجدول
+   ========================================================= */
+
+function addCell(tr, value) {
+
+  const td =
+    document.createElement("td");
+
+  td.textContent =
+    value ?? "";
+
+  tr.appendChild(td);
+
+}
+
+
+/* =========================================================
+   إعادة نموذج المنتج
+   ========================================================= */
+
+function resetForm() {
+
+  $("productForm").reset();
+
+  $("productId").value = "";
+
+  $("stock").value = "0";
+
+  $("isActive").value = "true";
+
+  $("editorTitle").textContent =
+    "إضافة منتج جديد";
+
+  $("saveBtn").textContent =
+    "حفظ المنتج";
+
+  message(
+    "formMessage",
+    ""
+  );
+
+  setBusy(false);
+
+}
+
+
+/* =========================================================
+   تعديل منتج
+   ========================================================= */
+
+function editProduct(id) {
+
+  const p =
+    products.find(
+      item => item.id === id
+    );
+
+
+  if (!p) return;
+
+
+  $("productId").value =
+    p.id;
+
+  $("name").value =
+    p.name;
+
+  $("category").value =
+    p.category;
+
+  $("price").value =
+    p.price;
+
+  $("oldPrice").value =
+    p.old_price ?? "";
+
+  $("imageUrl").value =
+    p.image_url;
+
+  $("sizes").value =
+    (p.sizes || []).join(", ");
+
+  $("colors").value =
+    (p.colors || []).join(", ");
+
+  $("stock").value =
+    p.stock;
+
+  $("isActive").value =
+    String(p.is_active);
+
+  $("description").value =
+    p.description || "";
+
+
+  $("editorTitle").textContent =
+    "تعديل المنتج";
+
+  $("saveBtn").textContent =
+    "حفظ التعديلات";
+
+
+  $("productFormCard").scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =========================================================
+   تحويل القائمة النصية إلى مصفوفة
+   ========================================================= */
+
+function parseList(value) {
+
+  return value
+    .split(",")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+}
+
+
+/* =========================================================
+   حفظ المنتج
+   ========================================================= */
+
+$("productForm").addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    if (busy) return;
+
+
+    const price =
+      Number($("price").value);
+
+    const oldRaw =
+      $("oldPrice").value.trim();
+
+    const oldPrice =
+      oldRaw === ""
+        ? null
+        : Number(oldRaw);
+
+    const stock =
+      Number($("stock").value);
+
+    const imageUrl =
+      $("imageUrl").value.trim();
+
+
+    if (
+      !Number.isFinite(price) ||
+      price < 0 ||
+      !Number.isInteger(stock) ||
+      stock < 0
+    ) {
+
+      message(
+        "formMessage",
+        "تحقق من السعر والكمية."
+      );
+
+      return;
+    }
+
+
+    if (
+      oldPrice !== null &&
+      (
+        !Number.isFinite(oldPrice) ||
+        oldPrice < price
+      )
+    ) {
+
+      message(
+        "formMessage",
+        "يجب أن يكون السعر القديم مساويًا للسعر الحالي أو أكبر منه."
+      );
+
+      return;
+    }
+
+
+    try {
+
+      const url =
+        new URL(imageUrl);
+
+      if (url.protocol !== "https:")
+        throw new Error();
+
+    } catch {
+
+      message(
+        "formMessage",
+        "أدخل رابط صورة صحيحًا يبدأ بـ https://"
+      );
+
+      return;
+    }
+
+
+    const payload = {
+
+      name:
+        $("name").value.trim(),
+
+      category:
+        $("category").value,
+
+      price,
+
+      old_price:
+        oldPrice,
+
+      image_url:
+        imageUrl,
+
+      sizes:
+        parseList(
+          $("sizes").value
+        ),
+
+      colors:
+        parseList(
+          $("colors").value
+        ),
+
+      stock,
+
+      is_active:
+        $("isActive").value === "true",
+
+      description:
+        $("description").value.trim(),
+
+      updated_at:
+        new Date().toISOString()
+
+    };
+
+
+    setBusy(true);
+
+
+    message(
+      "formMessage",
+      "جارٍ الحفظ...",
+      "success"
+    );
+
+
+    try {
+
+      const id =
+        $("productId").value;
+
+      let result;
+
+
+      if (id) {
+
+        result =
+          await db
+            .from("products")
+            .update(payload)
+            .eq("id", id);
+
+      } else {
+
+        result =
+          await db
+            .from("products")
+            .insert(payload);
+
+      }
+
+
+      if (result.error)
+        throw result.error;
+
+
+      message(
+        "formMessage",
+
+        id
+          ? "تم تحديث المنتج بنجاح."
+          : "تمت إضافة المنتج بنجاح.",
+
+        "success"
+      );
+
+
+      resetForm();
+
+      await loadProducts();
+
+
+    } catch (error) {
+
+      message(
+        "formMessage",
+        "تعذر حفظ المنتج: " +
+        error.message
+      );
+
+    } finally {
+
+      setBusy(false);
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   حذف المنتج
+   ========================================================= */
+
+async function deleteProduct(id) {
+
+  const p =
+    products.find(
+      item => item.id === id
+    );
+
+
+  if (
+    !p ||
+    !confirm(
+      "هل تريد حذف المنتج «" +
+      p.name +
+      "» نهائيًا؟"
+    )
+  ) return;
+
+
+  const {
+    error
+  } = await db
+
+    .from("products")
+
+    .delete()
+
+    .eq("id", id);
+
+
+  if (error) {
+
+    message(
+      "tableMessage",
+      "تعذر حذف المنتج: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  resetForm();
+
+  await loadProducts();
+
+
+  message(
+    "tableMessage",
+    "تم حذف المنتج.",
+    "success"
+  );
+
+}
+
+
+/* =========================================================
+   تشغيل التطبيق
+   ========================================================= */
+
 init();
+
 </script>
+
 </body>
 </html>
